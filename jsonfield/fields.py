@@ -2,6 +2,7 @@ import copy
 from django.db import models
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.translation import ugettext_lazy as _
+import collections
 try:
     from django.utils import six
 except ImportError:
@@ -130,7 +131,7 @@ class JSONFieldBase(six.with_metaclass(SubfieldBase, models.Field)):
 
         """
         if self.has_default():
-            if callable(self.default):
+            if isinstance(self.default, collections.Callable):
                 return self.default()
             return copy.deepcopy(self.default)
         # If the field doesn't have a default, then we punt to models.Field.

@@ -222,7 +222,7 @@ class OrderedDictSerializationTest(TestCase):
 
     def test_ordered_dict_differs_from_normal_dict(self):
         self.assertEqual(list(self.ordered_dict.keys()), self.expected_key_order)
-        self.assertNotEqual(dict(self.ordered_dict).keys(), self.expected_key_order)
+        self.assertNotEqual(list(dict(self.ordered_dict).keys()), self.expected_key_order)
 
     def test_default_behaviour_loses_sort_order(self):
         mod = JsonModel.objects.create(json=self.ordered_dict)
@@ -230,7 +230,7 @@ class OrderedDictSerializationTest(TestCase):
         mod_from_db = JsonModel.objects.get(id=mod.id)
 
         # mod_from_db lost ordering information during json.loads()
-        self.assertNotEqual(mod_from_db.json.keys(), self.expected_key_order)
+        self.assertNotEqual(list(mod_from_db.json.keys()), self.expected_key_order)
 
     def test_load_kwargs_hook_does_not_lose_sort_order(self):
         mod = OrderedJsonModel.objects.create(json=self.ordered_dict)
